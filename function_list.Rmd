@@ -1,4 +1,4 @@
-GSEA analysis: conversion of Entrez IDs to gene symbols
+# GSEA analysis: conversion of Entrez IDs to gene symbols
 
 ```R
 # Convert Entrez IDs to symbols
