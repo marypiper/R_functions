@@ -4,7 +4,7 @@
 
 ```R
 # Convert Entrez IDs to symbols
-## Loading bcb object (or database of Entrez to Symbol matching)
+## Loading bcb object (or data frame of Entrez to Symbol matching)
 bcb <- load("data/bcb.rda")
 
 ## Function to parse the associated Entrez IDs for each pathway and split at the "/", then extract these genes from the database of IDs ('annotable(bcb)') and output the gene symbol
