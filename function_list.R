@@ -1,0 +1,44 @@
+GSEA analysis: conversion of Entrez IDs to gene symbols
+
+```R
+# Convert Entrez IDs to symbols
+## Loading bcb object (or database of Entrez to Symbol matching)
+bcb <- load("data/bcb.rda")
+
+## Function to parse the associated Entrez IDs for each pathway and split at the "/", then extract these genes from the database of IDs ('annotable(bcb)') and output the gene symbol
+gsea_entrez_to_symbol <- function(list_idx){
+path <- gseaKEGGSummary$core_enrichment %>% str_split(pattern="/") %>% .[[list_idx]]
+
+
+idx <- which(annotable(bcb)$entrez %in% path)
+
+annotable(bcb)[idx,  "symbol"]
+}
+
+# Intialize list to output symbols
+list_gsea_symbols <- list()
+
+# Output symbols for every pathway
+list_gsea_symbols <- map(1:nrow(gseaKEGGSummary), gsea_entrez_to_symbol)
+
+# Name pathways based on the summary IDs
+names(list_gsea_symbols) <- gseaKEGGSummary$ID
+
+# Function to convert the associated gene symbols to a single value separated by "/"
+paste_symbols <- function(list_idx){
+  paste(list_gsea_symbols[[list_idx]], collapse ="/")
+}
+
+# Collapse to a single value for every pathway
+symbols <- map(1:length(list_gsea_symbols), paste_symbols)
+names(symbols) <- names(list_gsea_symbols)
+
+# Turn the single vales into a vector
+unlist(symbols)
+
+# Transpose the vector to be a column of symbols
+gene_symbols <- t(data.frame(symbols))
+
+# Add column to kegg summary
+gseaKEGGSummaryGenes <- data.frame(gseaKEGGSummary, gene_symbols)
+```
