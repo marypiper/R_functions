@@ -36,7 +36,7 @@ symbols <- map(1:length(list_gsea_symbols), paste_symbols)
 names(symbols) <- names(list_gsea_symbols)
 
 # Turn the single vales into a vector
-unlist(symbols)
+symbols <- unlist(symbols)
 
 # Transpose the vector to be a column of symbols
 gene_symbols <- t(data.frame(symbols))
