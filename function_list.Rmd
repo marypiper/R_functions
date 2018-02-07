@@ -1,4 +1,6 @@
-# GSEA analysis: conversion of Entrez IDs to gene symbols
+# List of functions for RNA-Seq analyses
+
+## GSEA analysis: conversion of Entrez IDs to gene symbols (using output from clusterProfiler)
 
 ```R
 # Convert Entrez IDs to symbols
