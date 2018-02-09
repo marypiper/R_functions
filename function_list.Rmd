@@ -35,7 +35,7 @@ paste_symbols <- function(list_idx){
 symbols <- map(1:length(list_gsea_symbols), paste_symbols)
 names(symbols) <- names(list_gsea_symbols)
 
-# Turn the single vales into a vector
+# Turn the single values into a vector
 symbols <- unlist(symbols)
 
 # Transpose the vector to be a column of symbols
