@@ -45,9 +45,32 @@ gene_symbols <- t(data.frame(symbols))
 gseaKEGGSummaryGenes <- data.frame(gseaKEGGSummary, gene_symbols)
 ```
 
-## Changing *C. elegans* sequence IDs to symbols
+## Changing *C. elegans* sequence IDs in Wormcat annotations to symbols
 
 ```r
+# Read in wormcat annotations downloaded from Wormcat (http://wormcat.com)
+wormcat <- read_csv("wormcat_whole_genome_nov-16-2019.csv")
+
+# Connect to AnnotationHub
+ah <- AnnotationHub()
+
+# Query AnnotationHub
+cel_ens <- query(ah, c("Caenorhabditis elegans", "EnsDb"))
+
+
+# Get most recent one
+cel_ens <- cel_ens[["AH78732"]]
+
+# Extract gene-level information
+genedb <- genes(cel_ens, return.type = "data.frame") %>% 
+  dplyr::select(gene_id, gene_name, symbol, description)  
+
+annotations <- genedb
+
+annotations$gene_name <-  str_replace(string=genedb$gene_name, pattern = "\\.", replacement = "_")
+
+wormcat_merged <- left_join(wormcat, annotations, by = c("Wormbase ID" = "gene_id"))
+
 ## Function to parse the associated IDs for each pathway and split at the "/", then extract these genes from the database of IDs  and output the gene symbol
 ora_seqID_to_symbol <- function(list_idx, cat_enrich_obj) {
   path <- cat_enrich_obj$geneID %>%
