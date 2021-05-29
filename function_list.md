@@ -104,5 +104,5 @@ get_symbols <- function(cat_enrich_obj){
   return(cat_enrich)
 }
 
-cat_enrich <- get_symbols(cat1_sig_enrich)
+cat1_sig_enrich <- get_symbols(cat1_sig_enrich)
 ```
