@@ -2,7 +2,7 @@
 
 ## GSEA analysis: conversion of Entrez IDs to gene symbols (using output from clusterProfiler)
 
-```R
+```r
 # Convert Entrez IDs to symbols
 ## Loading bcb object (or data frame of Entrez to Symbol matching) or already have it loaded
 bcb <- load("data/bcb.rda")
