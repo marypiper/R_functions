@@ -44,3 +44,45 @@ gene_symbols <- t(data.frame(symbols))
 # Add column to kegg summary
 gseaKEGGSummaryGenes <- data.frame(gseaKEGGSummary, gene_symbols)
 ```
+
+## Changing *C. elegans* sequence IDs to symbols
+
+```r
+## Function to parse the associated IDs for each pathway and split at the "/", then extract these genes from the database of IDs  and output the gene symbol
+ora_seqID_to_symbol <- function(list_idx, cat_enrich_obj) {
+  path <- cat_enrich_obj$geneID %>%
+    str_split(pattern="/") %>% .[[list_idx]]
+  idx <- which(wormcat_merged$`Sequence ID` %in% path)
+  wormcat_merged[idx,  "symbol"]
+}
+
+# Intialize list to output symbols
+get_symbols <- function(cat_enrich_obj){
+  list_ora_symbols <- list()
+  # Output symbols for every pathway
+  list_ora_symbols <-
+    map(1:nrow(cat_enrich_obj),
+        ora_seqID_to_symbol, cat_enrich_obj)
+  # Name pathways based on the summary IDs
+  names(list_ora_symbols) <-
+    cat_enrich_obj$ID
+  # Function to convert the associated gene symbols to a single value separated by "/"
+  paste_symbols <- function(list_idx){
+    paste(list_ora_symbols[[list_idx]]$symbol, collapse ="/")
+  }
+  
+  # Collapse to a single value for every pathway
+  symbols <- map(1:length(list_ora_symbols), paste_symbols)
+  names(symbols) <- names(list_ora_symbols)
+  # Turn the single values into a vector
+  symbols <- unlist(symbols)
+  
+  # Transpose the vector to be a column of symbols
+  gene_symbols <- data.frame(symbols)
+  # Add column to kegg summary
+  cat_enrich <- data.frame(cat_enrich_obj, gene_symbols)
+  return(cat_enrich)
+}
+
+cat_enrich <- get_symbols(cat1_sig_enrich)
+```
