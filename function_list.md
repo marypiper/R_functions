@@ -3,18 +3,15 @@
 ## GSEA analysis: conversion of Entrez IDs to gene symbols (using output from clusterProfiler)
 
 ```r
-# Convert Entrez IDs to symbols
-## Loading bcb object (or data frame of Entrez to Symbol matching) or already have it loaded
-bcb <- load("data/bcb.rda")
 
-## Function to parse the associated Entrez IDs for each pathway and split at the "/", then extract these genes from the database of IDs ('annotable(bcb)') and output the gene symbol
+## Function to parse the associated Entrez IDs for each pathway and split at the "/", then extract these genes from the database of IDs and output the gene symbol
 gsea_entrez_to_symbol <- function(list_idx){
 path <- gseaKEGGSummary$core_enrichment %>% str_split(pattern="/") %>% .[[list_idx]]
 
 
-idx <- which(annotable(bcb)$entrez %in% path)
+idx <- which(annotations$entrez %in% path)
 
-annotable(bcb)[idx,  "symbol"]
+annotations[idx,  "symbol"]
 }
 
 # Intialize list to output symbols
